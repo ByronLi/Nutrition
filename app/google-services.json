@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "919441581777",
+    "firebase_url": "https://nutrition-1357.firebaseio.com",
+    "project_id": "nutrition-1357",
+    "storage_bucket": "nutrition-1357.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:919441581777:android:c89fdaca813ba2e7",
+        "android_client_info": {
+          "package_name": "itp341.li.byron.nutrition"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "919441581777-91r442fa7b6sq2kbpkd823rvn1ui2448.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAdQJSPovpWDIKXWOOe_0i536D_AkS59iU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
