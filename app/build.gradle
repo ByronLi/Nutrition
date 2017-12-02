@@ -29,6 +29,7 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:11.6.2'
     compile 'com.google.firebase:firebase-database:11.6.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.google.code.gson:gson:2.8.1'
     testCompile 'junit:junit:4.12'
 }
 

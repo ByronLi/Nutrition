@@ -375,7 +375,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
 
             if (success) {
                 System.out.println("finish");
-                Intent homeScreen = new Intent(getApplicationContext(), Home.class);
+                Intent homeScreen = new Intent(getApplicationContext(), SearchContainer.class);
                 startActivity(homeScreen);
                 finish();
 
