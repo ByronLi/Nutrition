@@ -72,6 +72,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         populateAutoComplete();
 
         firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseAuth.getInstance().signOut();
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -327,12 +328,16 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
+             FirebaseUser user = null;
+
+            try {
             firebaseAuth.signInWithEmailAndPassword(mEmail, mPassword)
                     .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) {
                             if (task.isSuccessful()) {
                                 // Sign in success, update UI with the signed-in user's information
+                                System.out.println("Log in success");
                                 Log.d(TAG, "signInWithEmail:success");
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -346,15 +351,15 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                     });
 
 
-            try {
-                // Simulate network access.
-                Thread.sleep(200);
+                Thread.sleep(2000);
             } catch (InterruptedException e) {
                 return false;
             }
 
-            FirebaseUser user = firebaseAuth.getCurrentUser();
+            user = FirebaseAuth.getInstance().getCurrentUser();
+
             if (user != null){
+                System.out.println("user != null");
                 return true;
             }
             else{
@@ -369,7 +374,11 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
             showProgress(false);
 
             if (success) {
+                System.out.println("finish");
+                Intent homeScreen = new Intent(getApplicationContext(), Home.class);
+                startActivity(homeScreen);
                 finish();
+
             } else {
                 mPasswordView.setError(getString(R.string.error_incorrect_password));
                 mPasswordView.requestFocus();

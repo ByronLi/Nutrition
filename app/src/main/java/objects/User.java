@@ -1,0 +1,35 @@
+package objects;
+
+import android.net.Uri;
+
+public class User {
+
+    private String name;
+    private String image;
+
+
+    public String getName() {
+        return name;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public String getFavFood() {
+        return favFood;
+    }
+
+    private String favFood;
+
+    public User(){
+
+    }
+
+    public User(String name) {
+        this.name = name;
+        this.image = "";
+        this.favFood = "";
+    }
+
+}
