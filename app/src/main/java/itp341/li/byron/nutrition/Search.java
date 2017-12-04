@@ -14,6 +14,7 @@ import android.widget.*;
 import com.google.gson.Gson;
 import objects.DataContainer;
 import objects.Food;
+import objects.FoodAdapter;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -27,6 +28,8 @@ public class Search extends Activity {
 
     private ListView lv;
     DataContainer outerDC;
+    FoodAdapter arrayAdapter;
+    ArrayList<Food> concatList = new ArrayList<Food>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -34,6 +37,8 @@ public class Search extends Activity {
         setContentView(R.layout.activity_search);
 
         lv = (ListView) findViewById(R.id.list);
+
+        arrayAdapter = new FoodAdapter(this, android.R.layout.simple_list_item_1, concatList);
 
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 //        SearchView searchView = (SearchView) findViewById(R.id.search_bar);
@@ -46,7 +51,10 @@ public class Search extends Activity {
             // argument position gives the index of item which is clicked
             public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
             {
-                Food f = outerDC.getCommon().get(position);
+//                ArrayList<Food> concatList = outerDC.getBranded();
+//                concatList.addAll(outerDC.getCommon());
+
+                Food f = concatList.get(position);
                 Toast.makeText(getApplicationContext(), "Food Selected : "+ f.getFood_name(),   Toast.LENGTH_LONG).show();
             }
         });
@@ -77,19 +85,20 @@ public class Search extends Activity {
 
     private void doMySearch(String query){
 
-        new HttpAsyncTask().execute(query);
+       new HttpAsyncTask().execute(query);
 
     }
 
     private void updateList(DataContainer result){
-        ArrayList<String> temp = new ArrayList<String>();
-        for (Food f : result.getCommon()){
-            temp.add(f.getFood_name());
-        }
+        concatList.clear();
+        concatList.addAll(result.getBranded());
+        concatList.addAll(result.getCommon());
 
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, temp);
         lv.setAdapter(arrayAdapter);
+        arrayAdapter.notifyDataSetChanged();
         outerDC = result;
+        arrayAdapter.notifyDataSetChanged();
+        //finish();
     }
 
     private static DataContainer GET(String query){
@@ -141,7 +150,6 @@ public class Search extends Activity {
         @Override
         protected void onPostExecute(DataContainer result) {
             Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
-
             updateList(result);
 
             //System.out.print(result);
