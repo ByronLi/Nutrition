@@ -65,6 +65,59 @@ public class Food {
         this.photo = photo;
     }
 
+    public Food(){
+        this.photo = new Photo("","");
+
+    }
+
+    public void setFood_name(String food_name) {
+        this.food_name = food_name;
+    }
+
+    public void setImage(String url) {
+        this.photo.setThumb(url);
+    }
+
+    public void setServing_unit(String serving_unit) {
+        this.serving_unit = serving_unit;
+    }
+
+    public void setNix_brand_id(String nix_brand_id) {
+        this.nix_brand_id = nix_brand_id;
+    }
+
+    public void setBrand_name_item_name(String brand_name_item_name) {
+        this.brand_name_item_name = brand_name_item_name;
+    }
+
+    public void setServing_qty(double serving_qty) {
+        this.serving_qty = serving_qty;
+    }
+
+    public void setNf_calories(int nf_calories) {
+        this.nf_calories = nf_calories;
+    }
+
+    public void setBrand_name(String brand_name) {
+        this.brand_name = brand_name;
+    }
+
+    public void setBrand_type(String brand_type) {
+        this.brand_type = brand_type;
+    }
+
+    public void setNix_item_id(String nix_item_id) {
+        this.nix_item_id = nix_item_id;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public void setTag_id(String tag_id) {
+        this.tag_id = tag_id;
+    }
+
     private String food_name;
     private Photo photo;
     private String serving_unit;

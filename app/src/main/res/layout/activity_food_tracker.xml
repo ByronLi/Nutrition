@@ -7,12 +7,14 @@
         android:layout_height="match_parent"
         tools:context="itp341.li.byron.nutrition.FoodTracker"
         android:orientation="vertical"
+        android:id="@+id/trackerLayoutFragment"
 >
+    <FrameLayout android:layout_width="match_parent"
+                 android:id="@+id/calorieFragmentContainer"
+                 android:layout_height="100dp">
 
-    <LinearLayout android:layout_width="match_parent" android:layout_height="wrap_content">
 
-
-    </LinearLayout>
+    </FrameLayout>
 
     <ListView
             android:layout_width="match_parent"

@@ -12,11 +12,6 @@
             android:title="@string/title_search"/>
 
     <item
-        android:id="@+id/navigation_favorites"
-        android:icon="@android:drawable/btn_star_big_on"
-        android:title="@string/title_favorites"/>
-
-    <item
             android:id="@+id/navigation_profile"
             android:icon="@android:drawable/ic_dialog_info"
             android:title="@string/title_profile"/>

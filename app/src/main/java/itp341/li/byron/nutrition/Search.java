@@ -9,9 +9,14 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.*;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -34,6 +39,8 @@ public class Search extends Activity {
     DataContainer outerDC;
     FoodAdapter arrayAdapter;
     ArrayList<Food> concatList = new ArrayList<Food>();
+    DatabaseReference dbreference;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -49,6 +56,8 @@ public class Search extends Activity {
 //        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 //        searchView.setIconifiedByDefault(false);
 
+        dbreference = FirebaseDatabase.getInstance().getReference().child("UserDailyFoods").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
+
 
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
@@ -58,12 +67,12 @@ public class Search extends Activity {
 //                ArrayList<Food> concatList = outerDC.getBranded();
 //                concatList.addAll(outerDC.getCommon());
 
-                Food f = concatList.get(position);
+                final Food f = concatList.get(position);
 
                 //Layout stuff
                 LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-                View popupView = inflater.inflate(R.layout.popup_window, null);
-                final PopupWindow mPopupWindow = new PopupWindow(popupView, 280, 450);
+                final View popupView = inflater.inflate(R.layout.popup_window, null);
+                final PopupWindow mPopupWindow = new PopupWindow(popupView, ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 mPopupWindow.setElevation(5.0f);
 
                 //View Declarations
@@ -77,23 +86,31 @@ public class Search extends Activity {
 
                 //Set texts
                 foodName.setText(f.getFood_name().substring(0,1).toUpperCase()+f.getFood_name().substring(1));
-                calories.setText(Integer.toString(f.getNf_calories()));
+                calories.setText(Integer.toString(f.getNf_calories()) + " cal");
                 if (f.getBrand_name() != null){
                     brandName.setText(f.getBrand_name());
                 }
                 else{
-                    brandName.setText("");
+                    brandName.setText(R.string.common);
                 }
                 servingText.setText(Double.toString(f.getServing_qty()) + " " + f.getServing_unit());
                 Picasso.with(getApplicationContext()).load(f.getImage()).into(foodImage);
 
 
-                addFood.setOnClickListener(new View.OnClickListener(){
-                    @Override
-                    public void onClick(View view) {
-                        FirebaseDatabase fb = FirebaseDatabase.getInstance();
+                mPopupWindow.setOutsideTouchable(false);
+                mPopupWindow.setFocusable(true);
+                mPopupWindow.showAtLocation(findViewById(R.id.search_activity_layout), Gravity.CENTER,0,0);
 
+
+                addFood.setOnClickListener(new View.OnClickListener(){
+
+                    @Override
+                    public void onClick(View v){
+                        dbreference.push().setValue(f);
+                        Toast.makeText(Search.this, "Food added!", Toast.LENGTH_SHORT).show();
+                        mPopupWindow.dismiss();
                     }
+
 
                 });
 
@@ -104,7 +121,7 @@ public class Search extends Activity {
                     }
                 });
 
-                Toast.makeText(getApplicationContext(), "Food Selected : "+ f.getFood_name(),   Toast.LENGTH_LONG).show();
+                //Toast.makeText(getApplicationContext(), "Food Selected : "+ f.getFood_name(),   Toast.LENGTH_LONG).show();
             }
         });
 
@@ -140,8 +157,13 @@ public class Search extends Activity {
 
     private void updateList(DataContainer result){
         concatList.clear();
-        concatList.addAll(result.getBranded());
-        concatList.addAll(result.getCommon());
+        if (result != null && result.getBranded() != null) {
+            concatList.addAll(result.getBranded());
+            concatList.addAll(result.getCommon());
+        }
+        else{
+            Toast.makeText(this, "No results found!", Toast.LENGTH_SHORT).show();
+        }
 
         lv.setAdapter(arrayAdapter);
         arrayAdapter.notifyDataSetChanged();
@@ -150,7 +172,7 @@ public class Search extends Activity {
         //finish();
     }
 
-    private static DataContainer GET(String query){
+    private DataContainer GET(String query){
 
         DataContainer dc = null;
         String result = "";
@@ -182,6 +204,7 @@ public class Search extends Activity {
 
         } catch (Exception e) {
             Log.d("InputStream", e.getLocalizedMessage());
+            dc = null;
         }
 
         return dc;
@@ -198,7 +221,7 @@ public class Search extends Activity {
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(DataContainer result) {
-            Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+           // Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             updateList(result);
 
             //System.out.print(result);

@@ -45,9 +45,12 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         ImageView foodThumb = (ImageView) convertView.findViewById(R.id.image_list);
         // Populate the data into the template view using the data object
         foodName.setText(f.getFood_name());
-        calories.setText(Integer.toString(f.getNf_calories()));
+        calories.setText(Integer.toString(f.getNf_calories()) + " cal");
         if (f.getBrand_name() != null){
             brandName.setText(f.getBrand_name());
+        }
+        else{
+            brandName.setText(R.string.common);
         }
         if (f.getServing_unit() != null){
             servingSize.setText(f.getServing_qty() + " " + f.getServing_unit());

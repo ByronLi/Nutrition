@@ -17,12 +17,13 @@ import android.widget.SearchView;
 import android.widget.TextView;
 import com.google.firebase.auth.FirebaseAuth;
 
-public class Home extends AppCompatActivity implements Profile.OnFragmentInteractionListener{
+public class Home extends AppCompatActivity implements Profile.OnFragmentInteractionListener, FoodTracker.OnFragmentInteractionListener{
 
     private TextView mTextMessage;
     private SearchView searchView;
 
     Fragment profileFragment;
+    Fragment trackerFragment;
     Fragment searchFragment;
     FragmentManager fm;
     FragmentTransaction fragmentTransaction;
@@ -37,6 +38,7 @@ public class Home extends AppCompatActivity implements Profile.OnFragmentInterac
                 case R.id.navigation_home:
                     searchView.setVisibility(View.INVISIBLE);
                     fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.show(trackerFragment);
                     fragmentTransaction.hide(profileFragment);
                     fragmentTransaction.commit();
 
@@ -44,23 +46,16 @@ public class Home extends AppCompatActivity implements Profile.OnFragmentInterac
                 case R.id.navigation_search:
                     searchView.setVisibility(View.VISIBLE);
                     fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.hide(profileFragment);
+                    fragmentTransaction.hide(profileFragment).hide(trackerFragment);
                     fragmentTransaction.commit();
 
                     return true;
                 case R.id.navigation_profile:
                     searchView.setVisibility(View.INVISIBLE);
                     fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.show(profileFragment);
+                    fragmentTransaction.show(profileFragment).hide(trackerFragment);
                     fragmentTransaction.commit();
 
-
-                    return true;
-                case R.id.navigation_favorites:
-                    searchView.setVisibility(View.INVISIBLE);
-                    fragmentTransaction = fm.beginTransaction();
-                    fragmentTransaction.hide(profileFragment);
-                    fragmentTransaction.commit();
 
                     return true;
             }
@@ -81,9 +76,18 @@ public class Home extends AppCompatActivity implements Profile.OnFragmentInterac
         if (profileFragment == null && firebaseAuth.getCurrentUser() != null){
             profileFragment = Profile.newInstance(firebaseAuth.getCurrentUser().getUid());
             Fade fade = new Fade();
-            fade.setDuration(500);
+            fade.setDuration(1000);
             profileFragment.setEnterTransition(fade);
             profileFragment.setExitTransition(fade);
+        }
+
+        //FoodTracker = fm.findFragmentById(R.id.profileFragmentLayout);
+        if (trackerFragment == null && firebaseAuth.getCurrentUser() != null){
+            trackerFragment = FoodTracker.newInstance(firebaseAuth.getCurrentUser().getUid());
+            Fade fade = new Fade();
+            fade.setDuration(1000);
+            trackerFragment.setEnterTransition(fade);
+            trackerFragment.setExitTransition(fade);
         }
 
 //        searchFragment = fm.findFragmentById(R.id.searchFragmentLayout);
@@ -97,13 +101,14 @@ public class Home extends AppCompatActivity implements Profile.OnFragmentInterac
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         searchView = (SearchView) findViewById(R.id.home_search_bar);
         //TODO:comment out
-        searchView.setVisibility(View.VISIBLE);
+        searchView.setVisibility(View.INVISIBLE);
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
         searchView.setIconifiedByDefault(false);
 
         fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.add(R.id.fragmentContainer, profileFragment);
+        fragmentTransaction.add(R.id.fragmentContainer, profileFragment).add(R.id.fragmentContainer, trackerFragment);
         fragmentTransaction.hide(profileFragment);
+        fragmentTransaction.show(trackerFragment);
         fragmentTransaction.commit();
 
 

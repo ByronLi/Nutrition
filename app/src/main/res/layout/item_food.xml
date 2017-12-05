@@ -5,14 +5,15 @@
                 android:id="@+id/item_food"
 >
 
-    <TextView android:layout_width="wrap_content"
+    <TextView android:layout_width="50dp"
               android:layout_height="wrap_content"
               android:id="@+id/calorie_text"
 
-              android:textSize="20dp"
-              android:layout_marginEnd="9dp"
+              android:textSize="12sp"
+              android:ellipsize="marquee"
+              android:layout_marginEnd="15dp"
               android:textColor="@color/colorPrimary"
-              android:layout_marginBottom="8dp"
+              android:layout_marginBottom="10dp"
               android:layout_alignBottom="@+id/serving_text" android:layout_toStartOf="@+id/image_list"/>
 
     <TextView android:layout_width="210dp"
@@ -31,9 +32,9 @@
               android:layout_below="@+id/foodname_text"
               android:layout_alignStart="@+id/foodname_text"
               android:id="@+id/brandname_text"/>
-    <TextView android:layout_width="wrap_content"
+    <TextView android:layout_width="180dp"
               android:layout_height="wrap_content"
-
+              android:ellipsize="end"
               android:layout_toEndOf="@+id/brandname_text"
               android:layout_marginStart="7dp"
               android:layout_alignBottom="@+id/brandname_text"
@@ -44,7 +45,8 @@
                android:layout_alignParentTop="true"
                android:layout_alignParentEnd="true"
                android:layout_marginEnd="9dp"
-               android:layout_marginTop="8dp"
+               android:layout_marginTop="9dp"
+               android:layout_marginBottom="9dp"
                android:id="@+id/image_list"/>
 
 </RelativeLayout>
