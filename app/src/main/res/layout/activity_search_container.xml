@@ -7,6 +7,7 @@
         android:layout_height="match_parent"
         tools:context="itp341.li.byron.nutrition.SearchContainer"
         android:orientation="vertical"
+        android:id="@+id/searchFragmentLayout"
 >
     <SearchView android:layout_width="match_parent"
                 android:layout_height="wrap_content"

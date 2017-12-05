@@ -1,0 +1,49 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:tools="http://schemas.android.com/tools"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="itp341.li.byron.nutrition.Profile"
+                android:id="@+id/profileFragmentLayout"
+>
+
+
+    <TextView android:layout_width="200dp"
+              android:layout_height="wrap_content"
+              android:text="Byron Li"
+              android:textSize="40dp"
+              android:ellipsize="marquee"
+              android:id="@+id/profile_user_name"
+              android:layout_marginEnd="20dp"
+              android:layout_alignTop="@+id/profilePicture" android:layout_toStartOf="@+id/profilePicture"
+              android:layout_marginTop="26dp"/>
+
+    <ImageView android:layout_width="100dp"
+               android:layout_height="100dp"
+
+               android:layout_alignParentTop="true" android:layout_alignParentEnd="true" android:layout_marginEnd="19dp"
+               android:layout_marginTop="25dp" android:id="@+id/profilePicture"/>
+
+    <TextView android:layout_width="300dp"
+              android:layout_height="wrap_content"
+              android:text="@string/prompt_email"
+              android:textSize="30dp"
+              android:ellipsize="marquee"
+              android:id="@+id/profile_user_email"
+              android:layout_marginTop="17dp"
+              android:layout_below="@+id/profilePicture" android:layout_alignStart="@+id/profile_user_name"/>
+
+    <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Link Picture"
+            android:id="@+id/pictureUpload"
+            android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_marginBottom="70dp"
+            android:layout_alignParentBottom="true" android:layout_centerHorizontal="true"/>
+
+    <Button android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Account"
+            android:id="@+id/deleteAccountButton"
+            android:layout_marginLeft="20dp" android:layout_marginRight="20dp" android:layout_marginBottom="13dp"
+            android:layout_alignParentBottom="true" android:layout_alignParentEnd="true"/>
+
+</RelativeLayout>

@@ -372,8 +372,8 @@ public class Signup extends AppCompatActivity implements LoaderCallbacks<Cursor>
                             } else {
                                 // If sign in fails, display a message to the user.
                                 Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                Toast.makeText(Signup.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(Signup.this, "Authentication failed.",
+                                        //Toast.LENGTH_SHORT).show();
 
                             }
 

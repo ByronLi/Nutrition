@@ -9,12 +9,16 @@ import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.Gson;
+import com.squareup.picasso.Picasso;
 import objects.DataContainer;
 import objects.Food;
 import objects.FoodAdapter;
+import org.w3c.dom.Text;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -40,7 +44,7 @@ public class Search extends Activity {
 
         arrayAdapter = new FoodAdapter(this, android.R.layout.simple_list_item_1, concatList);
 
-        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        //SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 //        SearchView searchView = (SearchView) findViewById(R.id.search_bar);
 //        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
 //        searchView.setIconifiedByDefault(false);
@@ -55,6 +59,51 @@ public class Search extends Activity {
 //                concatList.addAll(outerDC.getCommon());
 
                 Food f = concatList.get(position);
+
+                //Layout stuff
+                LayoutInflater inflater = (LayoutInflater) getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+                View popupView = inflater.inflate(R.layout.popup_window, null);
+                final PopupWindow mPopupWindow = new PopupWindow(popupView, 280, 450);
+                mPopupWindow.setElevation(5.0f);
+
+                //View Declarations
+                ImageButton exitButton = (ImageButton) popupView.findViewById(R.id.popup_exit_button);
+                TextView foodName = (TextView) popupView.findViewById(R.id.popup_food_name);
+                TextView calories = (TextView) popupView.findViewById(R.id.popup_food_cal);
+                TextView brandName = (TextView) popupView.findViewById(R.id.popup_brand_name);
+                TextView servingText = (TextView) popupView.findViewById(R.id.popup_food_serving);
+                ImageView foodImage = (ImageView) popupView.findViewById(R.id.popup_food_image);
+                Button addFood = (Button) popupView.findViewById(R.id.popup_add_food_button);
+
+                //Set texts
+                foodName.setText(f.getFood_name().substring(0,1).toUpperCase()+f.getFood_name().substring(1));
+                calories.setText(Integer.toString(f.getNf_calories()));
+                if (f.getBrand_name() != null){
+                    brandName.setText(f.getBrand_name());
+                }
+                else{
+                    brandName.setText("");
+                }
+                servingText.setText(Double.toString(f.getServing_qty()) + " " + f.getServing_unit());
+                Picasso.with(getApplicationContext()).load(f.getImage()).into(foodImage);
+
+
+                addFood.setOnClickListener(new View.OnClickListener(){
+                    @Override
+                    public void onClick(View view) {
+                        FirebaseDatabase fb = FirebaseDatabase.getInstance();
+
+                    }
+
+                });
+
+                exitButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        mPopupWindow.dismiss();
+                    }
+                });
+
                 Toast.makeText(getApplicationContext(), "Food Selected : "+ f.getFood_name(),   Toast.LENGTH_LONG).show();
             }
         });

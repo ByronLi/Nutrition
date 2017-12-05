@@ -163,6 +163,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
      * If there are form errors (invalid email, missing fields, etc.), the
      * errors are presented and no actual login attempt is made.
      */
+    @SuppressWarnings("Duplicates")
     private void attemptLogin() {
         if (mAuthTask != null) {
             return;
@@ -223,6 +224,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
     /**
      * Shows the progress UI and hides the login form.
      */
+    @SuppressWarnings("Duplicates")
     @TargetApi(Build.VERSION_CODES.HONEYCOMB_MR2)
     private void showProgress(final boolean show) {
         // On Honeycomb MR2 we have the ViewPropertyAnimator APIs, which allow
@@ -351,7 +353,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
                     });
 
 
-                Thread.sleep(2000);
+                Thread.sleep(2500);
             } catch (InterruptedException e) {
                 return false;
             }
@@ -375,7 +377,7 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
 
             if (success) {
                 System.out.println("finish");
-                Intent homeScreen = new Intent(getApplicationContext(), SearchContainer.class);
+                Intent homeScreen = new Intent(getApplicationContext(), Home.class);
                 startActivity(homeScreen);
                 finish();
 
