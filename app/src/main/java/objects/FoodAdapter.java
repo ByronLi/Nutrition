@@ -22,21 +22,20 @@ public class FoodAdapter extends ArrayAdapter<Food> {
 
     private ArrayList<Food> foods;
 
-    public FoodAdapter(Context c, int resId, ArrayList<Food> foods){
+    public FoodAdapter(Context c, int resId, ArrayList<Food> foods) {
         super(c, resId, foods);
         this.c = c;
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
+    public View getView(int position, View convertView, ViewGroup parent) {
 
         Food f = getItem(position);
 
-        if (convertView == null){
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_food ,parent, false);
+        if (convertView == null) {
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_food, parent, false);
         }
 
-        //TODO: Example
         // Lookup view for data population
         TextView foodName = (TextView) convertView.findViewById(R.id.foodname_text);
         TextView calories = (TextView) convertView.findViewById(R.id.calorie_text);
@@ -45,17 +44,16 @@ public class FoodAdapter extends ArrayAdapter<Food> {
         ImageView foodThumb = (ImageView) convertView.findViewById(R.id.image_list);
         // Populate the data into the template view using the data object
         foodName.setText(f.getFood_name());
-        calories.setText(Integer.toString(f.getNf_calories()) + " cal");
-        if (f.getBrand_name() != null){
+        calories.setText(Double.toString(f.getNf_calories()) + " cal");
+        if (f.getBrand_name() != null) {
             brandName.setText(f.getBrand_name());
-        }
-        else{
+        } else {
             brandName.setText(R.string.common);
         }
-        if (f.getServing_unit() != null){
+        if (f.getServing_unit() != null) {
             servingSize.setText(f.getServing_qty() + " " + f.getServing_unit());
         }
-        if (f.getImage() != null) {
+        if (f.getImage() != null && !f.getImage().equals("")) {
             Picasso.with(c).load(f.getImage()).into(foodThumb);
         }
         // Return the completed view to render on screen

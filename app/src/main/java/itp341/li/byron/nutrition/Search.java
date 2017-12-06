@@ -59,11 +59,9 @@ public class Search extends Activity {
         dbreference = FirebaseDatabase.getInstance().getReference().child("UserDailyFoods").child(FirebaseAuth.getInstance().getCurrentUser().getUid());
 
 
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             // argument position gives the index of item which is clicked
-            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3)
-            {
+            public void onItemClick(AdapterView<?> arg0, View v, int position, long arg3) {
 //                ArrayList<Food> concatList = outerDC.getBranded();
 //                concatList.addAll(outerDC.getCommon());
 
@@ -85,12 +83,11 @@ public class Search extends Activity {
                 Button addFood = (Button) popupView.findViewById(R.id.popup_add_food_button);
 
                 //Set texts
-                foodName.setText(f.getFood_name().substring(0,1).toUpperCase()+f.getFood_name().substring(1));
-                calories.setText(Integer.toString(f.getNf_calories()) + " cal");
-                if (f.getBrand_name() != null){
+                foodName.setText(f.getFood_name().substring(0, 1).toUpperCase() + f.getFood_name().substring(1));
+                calories.setText(Double.toString(f.getNf_calories()) + " cal");
+                if (f.getBrand_name() != null) {
                     brandName.setText(f.getBrand_name());
-                }
-                else{
+                } else {
                     brandName.setText(R.string.common);
                 }
                 servingText.setText(Double.toString(f.getServing_qty()) + " " + f.getServing_unit());
@@ -99,13 +96,13 @@ public class Search extends Activity {
 
                 mPopupWindow.setOutsideTouchable(false);
                 mPopupWindow.setFocusable(true);
-                mPopupWindow.showAtLocation(findViewById(R.id.search_activity_layout), Gravity.CENTER,0,0);
+                mPopupWindow.showAtLocation(findViewById(R.id.search_activity_layout), Gravity.CENTER, 0, 0);
 
 
-                addFood.setOnClickListener(new View.OnClickListener(){
+                addFood.setOnClickListener(new View.OnClickListener() {
 
                     @Override
-                    public void onClick(View v){
+                    public void onClick(View v) {
                         dbreference.push().setValue(f);
                         Toast.makeText(Search.this, "Food added!", Toast.LENGTH_SHORT).show();
                         mPopupWindow.dismiss();
@@ -139,7 +136,7 @@ public class Search extends Activity {
     }
 
 
-    private void handleIntent(Intent intent){
+    private void handleIntent(Intent intent) {
 
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             String query = intent.getStringExtra(SearchManager.QUERY);
@@ -149,19 +146,18 @@ public class Search extends Activity {
         }
     }
 
-    private void doMySearch(String query){
+    private void doMySearch(String query) {
 
-       new HttpAsyncTask().execute(query);
+        new HttpAsyncTask().execute(query);
 
     }
 
-    private void updateList(DataContainer result){
+    private void updateList(DataContainer result) {
         concatList.clear();
         if (result != null && result.getBranded() != null) {
             concatList.addAll(result.getBranded());
             concatList.addAll(result.getCommon());
-        }
-        else{
+        } else {
             Toast.makeText(this, "No results found!", Toast.LENGTH_SHORT).show();
         }
 
@@ -172,7 +168,7 @@ public class Search extends Activity {
         //finish();
     }
 
-    private DataContainer GET(String query){
+    private DataContainer GET(String query) {
 
         DataContainer dc = null;
         String result = "";
@@ -194,11 +190,8 @@ public class Search extends Activity {
             dc = gson.fromJson(in, DataContainer.class);
             System.out.println(dc.getBranded().get(0).getFood_name());
 
-            if(in != null){
-                //TODO:
-            }
-
-            else {
+            if (in != null) {
+            } else {
                 result = "Read Error!";
             }
 
@@ -212,16 +205,17 @@ public class Search extends Activity {
 
     }
 
-    private class HttpAsyncTask extends AsyncTask<String, Void, DataContainer>{
+    private class HttpAsyncTask extends AsyncTask<String, Void, DataContainer> {
         @Override
         protected DataContainer doInBackground(String... query) {
 
             return GET(query[0]);
         }
+
         // onPostExecute displays the results of the AsyncTask.
         @Override
         protected void onPostExecute(DataContainer result) {
-           // Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
+            // Toast.makeText(getBaseContext(), "Received!", Toast.LENGTH_LONG).show();
             updateList(result);
 
             //System.out.print(result);

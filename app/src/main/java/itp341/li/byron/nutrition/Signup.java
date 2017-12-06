@@ -33,6 +33,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 import objects.User;
 
 import java.util.ArrayList;
@@ -51,13 +52,7 @@ public class Signup extends AppCompatActivity implements LoaderCallbacks<Cursor>
     private static final int REQUEST_READ_CONTACTS = 0;
     private static final String TAG = "EmailPassword";
 
-    /**
-     * A dummy authentication store containing known user names and passwords.
-     * TODO: remove after connecting to a real authentication system.
-     */
-    private static final String[] DUMMY_CREDENTIALS = new String[]{
-            "foo@example.com:hello", "bar@example.com:world"
-    };
+
     /**
      * Keep track of the login task to ensure we can cancel it if requested.
      */
@@ -83,6 +78,9 @@ public class Signup extends AppCompatActivity implements LoaderCallbacks<Cursor>
 
         firebaseAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        ImageView signupLogo = (ImageView) findViewById(R.id.signup_logo);
+        Picasso.with(getApplicationContext()).load(R.mipmap.ic_launcher).into(signupLogo);
 
         mNameView = (EditText) findViewById(R.id.name);
         mPasswordView = (EditText) findViewById(R.id.password);
@@ -184,13 +182,11 @@ public class Signup extends AppCompatActivity implements LoaderCallbacks<Cursor>
         mEmailView.setError(null);
         mPasswordView.setError(null);
         mNameView.setError(null);
-        //TODO: reset name error
 
         // Store values at the time of the login attempt.
         String email = mEmailView.getText().toString();
         String password = mPasswordView.getText().toString();
         String name = mNameView.getText().toString();
-        //TODO: Get name from edittext
 
         boolean cancel = false;
         View focusView = null;
@@ -213,9 +209,11 @@ public class Signup extends AppCompatActivity implements LoaderCallbacks<Cursor>
             focusView = mEmailView;
             cancel = true;
         }
+        else if (name.length() < 2){
+            focusView = mNameView;
+            cancel = true;
+        }
 
-
-        //TODO: Check for valid name
 
         if (cancel) {
             // There was an error; don't attempt login and focus the first
@@ -353,33 +351,33 @@ public class Signup extends AppCompatActivity implements LoaderCallbacks<Cursor>
             try {
                 // Simulate network access.
 
-            firebaseAuth.createUserWithEmailAndPassword(mEmail, mPassword)
-                    .addOnCompleteListener(Signup.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                Log.d(TAG, "createUserWithEmail:success");
-                                FirebaseUser user = firebaseAuth.getCurrentUser();
-                                String userId = user.getUid();
-                                User uObj = new User(mName);
-                                System.out.print(userId);
-                                mDatabase.child("Users").child(userId).setValue(uObj);
-                                Toast.makeText(Signup.this, "Success",
-                                        Toast.LENGTH_LONG).show();
-                                //mDatabase.child("Users").setValue(2);
+                firebaseAuth.createUserWithEmailAndPassword(mEmail, mPassword)
+                        .addOnCompleteListener(Signup.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    Log.d(TAG, "createUserWithEmail:success");
+                                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                                    String userId = user.getUid();
+                                    User uObj = new User(mName);
+                                    System.out.print(userId);
+                                    mDatabase.child("Users").child(userId).setValue(uObj);
+                                    Toast.makeText(Signup.this, "Success",
+                                            Toast.LENGTH_LONG).show();
+                                    //mDatabase.child("Users").setValue(2);
 
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                                //Toast.makeText(Signup.this, "Authentication failed.",
-                                        //Toast.LENGTH_SHORT).show();
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "createUserWithEmail:failure", task.getException());
+                                    //Toast.makeText(Signup.this, "Authentication failed.",
+                                    //Toast.LENGTH_SHORT).show();
 
+                                }
+
+                                // ...
                             }
-
-                            // ...
-                        }
-                    });
+                        });
 
                 Thread.sleep(2000);
             } catch (InterruptedException e) {
@@ -387,10 +385,9 @@ public class Signup extends AppCompatActivity implements LoaderCallbacks<Cursor>
             }
 
             FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null){
+            if (user != null) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
 

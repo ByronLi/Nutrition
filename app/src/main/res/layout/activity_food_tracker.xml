@@ -11,8 +11,8 @@
 >
     <FrameLayout android:layout_width="match_parent"
                  android:id="@+id/calorieFragmentContainer"
+                 android:background="#ce19a3ff"
                  android:layout_height="100dp">
-
 
     </FrameLayout>
 

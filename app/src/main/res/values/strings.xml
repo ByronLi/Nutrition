@@ -7,8 +7,10 @@
     <string name="title_search">Search</string>
     <string name="title_favorites">Favorites</string>
     <string name="title_profile">Profile</string>
-    <string name="search_hint">Enter the name of a food, or a UPC code</string>
+    <string name="search_hint">Enter the name of a food or brand</string>
     <string name="common">Common</string>
+
+    <string name="nutriUrl">https://lh3.googleusercontent.com/-zY9b7OrEv3YdTJyK8pxuG-BO6c9WLTpRsfrwXdUGRLGtdJOGOtJLNYTzdbeC_6ulBs7HmT6gM496jNDz0x2e_dKAGxI9qmZSsOHMG2KX2V9gzS-4TEhtRy6F190h5rzH-AVfvGgIGH5AyPnJv_xGsE_wi9OCEpoQFBlHYMqNSd8CT9Rchw3sQ6USAECOWooK4sFR5nB8Ni7HSiNStuC-u_wHFECV3Zc3sKKKGLx0M0t0FOu9M27ru9tT8xPKfvNSFnbXuQIWK5dPhO4ZnZt0WpPAJhF3Fh3GXW3rje3w4X1ksztY7m4lB052u3kTanVCqKmpzcnQ15hua3a91HJTxlMOwoqunIa9vck9_01xLxfApnrRTGEwdp4jx_W6co7bdzxKsIAO8GttLp9d-KwUID6UsIji8d4haqSDk2rXr24Fo2c7k-HLxmQQY6J_zkT6PRtPXgB15fmpi2DPHbXEsRuFL47DuDQrw8BJ05adt5RYU81aUmDW05h9z6ZXx9OaiV7ChiGIC4qpLGOZ24TcQrdorZfv0IeWT_Gd6Jz2HGmVwQ2Ge2grksGQ_w=w1410-h1036</string>
 
 
     <!-- Strings related to login -->

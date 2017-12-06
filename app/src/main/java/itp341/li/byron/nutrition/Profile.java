@@ -7,6 +7,14 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.Toast;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.*;
+import objects.User;
+import org.w3c.dom.Text;
 
 
 /**
@@ -25,6 +33,15 @@ public class Profile extends Fragment {
 
     // TODO: Rename and change types of parameters
     private String muid;
+    private SeekBar seekBar;
+    private Button saveChanges;
+    private TextView profileCalorieTextView;
+    private int dailyCalorieGoal = 0;
+    private String profileName;
+    private TextView profileNameTV;
+    private TextView profileEmailTV;
+    private String userEmail;
+    DatabaseReference userReference;
 
     private OnFragmentInteractionListener mListener;
 
@@ -60,7 +77,67 @@ public class Profile extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false);
+        View v = inflater.inflate(R.layout.fragment_profile, container, false);
+        userReference = FirebaseDatabase.getInstance().getReference().child("Users").child((String) getArguments().get(ARG_UID));
+
+        profileCalorieTextView = (TextView) v.findViewById(R.id.profile_seekbar_response);
+
+        profileNameTV = (TextView) v.findViewById(R.id.profile_user_name);
+        profileEmailTV = (TextView) v.findViewById(R.id.profile_user_email);
+
+
+        seekBar = (SeekBar) v.findViewById(R.id.profile_calorie_chooser);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
+                dailyCalorieGoal = ((int) Math.round(i / 10.0)) * 10;
+                seekBar.setProgress(dailyCalorieGoal);
+                profileCalorieTextView.setText(dailyCalorieGoal + " Cal");
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        ValueEventListener userCalListener = new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                User u = dataSnapshot.getValue(User.class);
+                dailyCalorieGoal = u.getDailyCalorieGoal();
+                profileCalorieTextView.setText(Integer.toString(dailyCalorieGoal) + " Cal");
+                seekBar.setProgress(dailyCalorieGoal);
+
+                profileName = u.getName();
+                userEmail = FirebaseAuth.getInstance().getCurrentUser().getEmail();
+                profileEmailTV.setText(userEmail);
+                profileNameTV.setText(profileName);
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        };
+        userReference.addValueEventListener(userCalListener);
+
+        saveChanges = (Button) v.findViewById(R.id.saveChanges_button);
+        saveChanges.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getContext(), "Changes Saved", Toast.LENGTH_SHORT).show();
+                userReference.child("dailyCalorieGoal").setValue(dailyCalorieGoal);
+            }
+        });
+
+        return v;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

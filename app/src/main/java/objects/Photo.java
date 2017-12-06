@@ -6,7 +6,7 @@ public class Photo {
         return thumb;
     }
 
-    public void setThumb(String url){
+    public void setThumb(String url) {
         this.thumb = url;
     }
 

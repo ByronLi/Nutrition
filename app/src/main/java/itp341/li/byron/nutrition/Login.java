@@ -32,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,6 +74,9 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
 
         firebaseAuth = FirebaseAuth.getInstance();
         FirebaseAuth.getInstance().signOut();
+
+        ImageView loginLogo = (ImageView) findViewById(R.id.login_logo);
+        Picasso.with(getBaseContext()).load(R.mipmap.ic_launcher).into(loginLogo);
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -330,27 +334,27 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
         protected Boolean doInBackground(Void... params) {
             // TODO: attempt authentication against a network service.
 
-             FirebaseUser user = null;
+            FirebaseUser user = null;
 
             try {
-            firebaseAuth.signInWithEmailAndPassword(mEmail, mPassword)
-                    .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
-                        @Override
-                        public void onComplete(@NonNull Task<AuthResult> task) {
-                            if (task.isSuccessful()) {
-                                // Sign in success, update UI with the signed-in user's information
-                                System.out.println("Log in success");
-                                Log.d(TAG, "signInWithEmail:success");
-                            } else {
-                                // If sign in fails, display a message to the user.
-                                Log.w(TAG, "signInWithEmail:failure", task.getException());
-                                Toast.makeText(Login.this, "Authentication failed.",
-                                        Toast.LENGTH_SHORT).show();
+                firebaseAuth.signInWithEmailAndPassword(mEmail, mPassword)
+                        .addOnCompleteListener(Login.this, new OnCompleteListener<AuthResult>() {
+                            @Override
+                            public void onComplete(@NonNull Task<AuthResult> task) {
+                                if (task.isSuccessful()) {
+                                    // Sign in success, update UI with the signed-in user's information
+                                    System.out.println("Log in success");
+                                    Log.d(TAG, "signInWithEmail:success");
+                                } else {
+                                    // If sign in fails, display a message to the user.
+                                    Log.w(TAG, "signInWithEmail:failure", task.getException());
+                                    Toast.makeText(Login.this, "Authentication failed.",
+                                            Toast.LENGTH_SHORT).show();
 
+                                }
+                                // ...
                             }
-                            // ...
-                        }
-                    });
+                        });
 
 
                 Thread.sleep(2500);
@@ -360,11 +364,10 @@ public class Login extends AppCompatActivity implements LoaderCallbacks<Cursor> 
 
             user = FirebaseAuth.getInstance().getCurrentUser();
 
-            if (user != null){
+            if (user != null) {
                 System.out.println("user != null");
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
 

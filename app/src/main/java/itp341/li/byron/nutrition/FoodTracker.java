@@ -2,6 +2,8 @@ package itp341.li.byron.nutrition;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
@@ -12,21 +14,30 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import com.google.firebase.database.*;
+import layout.CalorieFragment;
 import objects.DataContainer;
 import objects.Food;
 import objects.FoodAdapter;
+import objects.User;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodTracker extends Fragment {
+public class FoodTracker extends Fragment implements CalorieFragment.OnFragmentInteractionListener {
 
     ListView trackerList;
     ArrayList<Food> savedFoodList;
     ArrayList<String> foodUIDList = new ArrayList<String>();
     private DatabaseReference dbreference;
+    private DatabaseReference userReference;
     FoodAdapter arrayAdapter;
+    int sum;
+    int goal;
+
+    CalorieFragment calorieFragment;
+    FragmentManager fm;
+    FragmentTransaction fragmentTransaction;
 
     private String muid;
 
@@ -59,17 +70,28 @@ public class FoodTracker extends Fragment {
     }
 
     @Override
+    public void onFragmentInteraction(Uri uri) {
+        //you can leave it empty
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
-        dbreference = FirebaseDatabase.getInstance().getReference().child("UserDailyFoods").child((String)getArguments().get("uid"));
+        dbreference = FirebaseDatabase.getInstance().getReference().child("UserDailyFoods").child((String) getArguments().get("uid"));
+        userReference = FirebaseDatabase.getInstance().getReference().child("Users").child((String) getArguments().get("uid"));
         View v = inflater.inflate(R.layout.activity_food_tracker, container, false);
         trackerList = (ListView) v.findViewById(R.id.trackerList);
         savedFoodList = new ArrayList<Food>();
         arrayAdapter = new FoodAdapter(getContext(), android.R.layout.simple_list_item_1, savedFoodList);
         trackerList.setAdapter(arrayAdapter);
+        fm = getFragmentManager();
         updateList();
+
+
+        //goal = 1800;
+
 
         return v;
     }
@@ -114,33 +136,66 @@ public class FoodTracker extends Fragment {
     }
 
 
-    private void updateList(){
+    private void updateList() {
 
         String uid = (String) getArguments().get("uid");
+
         ValueEventListener dataListener = new ValueEventListener() {
 
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 ArrayList<Food> foods = new ArrayList<Food>();
-                int sum = 0;
+                sum = 0;
                 foodUIDList.clear();
 
-                for(DataSnapshot foodSnapshot : dataSnapshot.getChildren()){
+                for (DataSnapshot foodSnapshot : dataSnapshot.getChildren()) {
                     Food f = foodSnapshot.getValue(Food.class);
                     foodUIDList.add(foodSnapshot.getKey());
                     if (f != null) {
                         foods.add(f);
                         sum += f.getNf_calories();
-                    }
-                    else{
+                    } else {
                         System.out.println("nulllll");
                     }
                     System.out.println("foodnamefb " + f.getFood_name());
                 }
+                System.out.println(sum);
                 savedFoodList.clear();
                 savedFoodList.addAll(foods);
                 arrayAdapter.notifyDataSetChanged();
+
+                if (calorieFragment == null) {
+                    calorieFragment = CalorieFragment.newInstance((String) getArguments().get("uid"), goal, sum);
+                    fragmentTransaction = fm.beginTransaction();
+                    fragmentTransaction.add(R.id.calorieFragmentContainer, calorieFragment);
+                    fragmentTransaction.show(calorieFragment);
+                    fragmentTransaction.commit();
+                    ValueEventListener userCalListener = new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            User u = dataSnapshot.getValue(User.class);
+                            goal = u.getDailyCalorieGoal();
+                            System.out.println(goal + " goal");
+                            if (calorieFragment != null) {
+                                try {
+
+                                } catch (Exception e) {
+
+                                }
+                                calorieFragment.setText(sum, goal);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    };
+                    userReference.addValueEventListener(userCalListener);
+                } else {
+                    calorieFragment.setText(sum, goal);
+                }
             }
 
             @Override
@@ -149,6 +204,8 @@ public class FoodTracker extends Fragment {
             }
         };
 
-    dbreference.addValueEventListener(dataListener);
+        dbreference.addValueEventListener(dataListener);
+
+
     }
 }

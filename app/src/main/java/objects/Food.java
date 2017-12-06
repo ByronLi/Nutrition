@@ -26,7 +26,7 @@ public class Food {
         return serving_qty;
     }
 
-    public int getNf_calories() {
+    public double getNf_calories() {
         return nf_calories;
     }
 
@@ -65,8 +65,8 @@ public class Food {
         this.photo = photo;
     }
 
-    public Food(){
-        this.photo = new Photo("","");
+    public Food() {
+        this.photo = new Photo("", "");
 
     }
 
@@ -124,7 +124,7 @@ public class Food {
     private String nix_brand_id;
     private String brand_name_item_name;
     private double serving_qty;
-    private int nf_calories;
+    private double nf_calories;
     private String brand_name;
     private String brand_type;
     private String nix_item_id;
